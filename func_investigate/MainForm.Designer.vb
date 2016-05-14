@@ -51,6 +51,7 @@ Partial Class MainForm
         Me.IntegralResultList = New System.Windows.Forms.ListBox()
         Me.TabControl = New System.Windows.Forms.TabControl()
         Me.TabFunction = New System.Windows.Forms.TabPage()
+        Me.StepValue = New System.Windows.Forms.NumericUpDown()
         Me.FunctionRootList = New System.Windows.Forms.ListBox()
         Me.Label11 = New System.Windows.Forms.Label()
         Me.Label10 = New System.Windows.Forms.Label()
@@ -59,14 +60,13 @@ Partial Class MainForm
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.GraphicMaxMinButton = New System.Windows.Forms.Button()
         Me.ErrorValueTooltip = New System.Windows.Forms.ToolTip(Me.components)
-        Me.StepValue = New System.Windows.Forms.NumericUpDown()
         CType(Me.NextValue, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TabControl.SuspendLayout()
         Me.TabFunction.SuspendLayout()
+        CType(Me.StepValue, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.ErrorValue, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TabIntegral.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
-        CType(Me.StepValue, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'GraphicsPanel
@@ -349,6 +349,17 @@ Partial Class MainForm
         Me.TabFunction.Text = "Функция"
         Me.TabFunction.UseVisualStyleBackColor = True
         '
+        'StepValue
+        '
+        Me.StepValue.DecimalPlaces = 5
+        Me.StepValue.Increment = New Decimal(New Integer() {1, 0, 0, 196608})
+        Me.StepValue.Location = New System.Drawing.Point(73, 59)
+        Me.StepValue.Minimum = New Decimal(New Integer() {1, 0, 0, 327680})
+        Me.StepValue.Name = "StepValue"
+        Me.StepValue.Size = New System.Drawing.Size(90, 18)
+        Me.StepValue.TabIndex = 26
+        Me.StepValue.Value = New Decimal(New Integer() {1, 0, 0, 262144})
+        '
         'FunctionRootList
         '
         Me.FunctionRootList.FormattingEnabled = True
@@ -378,16 +389,16 @@ Partial Class MainForm
         '
         'ErrorValue
         '
-        Me.ErrorValue.DecimalPlaces = 5
-        Me.ErrorValue.Increment = New Decimal(New Integer() {1, 0, 0, 262144})
+        Me.ErrorValue.DecimalPlaces = 8
+        Me.ErrorValue.Increment = New Decimal(New Integer() {1, 0, 0, 524288})
         Me.ErrorValue.Location = New System.Drawing.Point(73, 154)
         Me.ErrorValue.Maximum = New Decimal(New Integer() {1, 0, 0, 0})
-        Me.ErrorValue.Minimum = New Decimal(New Integer() {1, 0, 0, 262144})
+        Me.ErrorValue.Minimum = New Decimal(New Integer() {1, 0, 0, 524288})
         Me.ErrorValue.Name = "ErrorValue"
         Me.ErrorValue.Size = New System.Drawing.Size(90, 18)
         Me.ErrorValue.TabIndex = 23
         Me.ErrorValueTooltip.SetToolTip(Me.ErrorValue, "Погрешность")
-        Me.ErrorValue.Value = New Decimal(New Integer() {1, 0, 0, 262144})
+        Me.ErrorValue.Value = New Decimal(New Integer() {1, 0, 0, 524288})
         '
         'TabIntegral
         '
@@ -434,17 +445,6 @@ Partial Class MainForm
         '
         Me.ErrorValueTooltip.ToolTipTitle = "Помощь"
         '
-        'StepValue
-        '
-        Me.StepValue.DecimalPlaces = 5
-        Me.StepValue.Increment = New Decimal(New Integer() {1, 0, 0, 196608})
-        Me.StepValue.Location = New System.Drawing.Point(73, 59)
-        Me.StepValue.Minimum = New Decimal(New Integer() {1, 0, 0, 327680})
-        Me.StepValue.Name = "StepValue"
-        Me.StepValue.Size = New System.Drawing.Size(90, 18)
-        Me.StepValue.TabIndex = 26
-        Me.StepValue.Value = New Decimal(New Integer() {1, 0, 0, 262144})
-        '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 11.0!)
@@ -466,11 +466,11 @@ Partial Class MainForm
         Me.TabControl.ResumeLayout(False)
         Me.TabFunction.ResumeLayout(False)
         Me.TabFunction.PerformLayout()
+        CType(Me.StepValue, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.ErrorValue, System.ComponentModel.ISupportInitialize).EndInit()
         Me.TabIntegral.ResumeLayout(False)
         Me.TabIntegral.PerformLayout()
         Me.GroupBox1.ResumeLayout(False)
-        CType(Me.StepValue, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
