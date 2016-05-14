@@ -1,9 +1,9 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class MainForm
     Inherits System.Windows.Forms.Form
 
     'Форма переопределяет dispose для очистки списка компонентов.
-    <System.Diagnostics.DebuggerNonUserCode()> _
+    <System.Diagnostics.DebuggerNonUserCode()>
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
         Try
             If disposing AndAlso components IsNot Nothing Then
@@ -20,7 +20,7 @@ Partial Class MainForm
     'Примечание: следующая процедура является обязательной для конструктора форм Windows Forms
     'Для ее изменения используйте конструктор форм Windows Form.  
     'Не изменяйте ее в редакторе исходного кода.
-    <System.Diagnostics.DebuggerStepThrough()> _
+    <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Me.GraphicsPanel = New System.Windows.Forms.Panel()
@@ -225,7 +225,7 @@ Partial Class MainForm
         Me.NextValue.Name = "NextValue"
         Me.NextValue.Size = New System.Drawing.Size(90, 18)
         Me.NextValue.TabIndex = 14
-        Me.NextValue.Value = New Decimal(New Integer() {1, 0, 0, 262144})
+        Me.NextValue.Value = New Decimal(New Integer() {10000, 0, 0, 262144})
         '
         'CalculateFunctionButton
         '

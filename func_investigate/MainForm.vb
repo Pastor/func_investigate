@@ -1,4 +1,7 @@
-﻿Public Class MainForm
+﻿Imports System.Drawing.Imaging
+Imports System.Threading
+
+Public Class MainForm
 
     ReadOnly _funcResult As List(Of KeyValuePair(Of Double, Double)) = New List(Of KeyValuePair(Of Double, Double))
     ReadOnly _funcDiffResult As List(Of KeyValuePair(Of Double, Double)) = New List(Of KeyValuePair(Of Double, Double))
@@ -9,14 +12,17 @@
     Const GraphicYOffset = 20
     Const MaxYBorder = 10000000
 
+    Dim _graphic As Bitmap
+
 
     Private Sub GraphicClearButton_Click(sender As Object, e As EventArgs) Handles GraphicClearButton.Click
         ClearGraphics()
+        GraphicsPanel.Invalidate()
     End Sub
 
     Private Sub ClearGraphics()
-        Dim g As Graphics = GraphicsPanel.CreateGraphics()
-        Dim blackPen = New Pen(Color.Black)
+        Dim g As Graphics = Graphics.FromImage(_graphic)
+        Dim blackPen = New Pen(Color.Black, 1)
 
         g.Clear(SystemColors.Control)
         g.SmoothingMode = Drawing2D.SmoothingMode.AntiAlias
@@ -28,21 +34,26 @@
         For i As Double = startCalculateValue - 1 To endCalculateValue + 1
             g.DrawString(Convert.ToString(i), GraphicsPanel.Font, Brushes.Black, NormalizeCoordX(i, GraphicsPanel.Width), Convert.ToInt32(GraphicsPanel.Height / 2))
         Next
-        g.DrawRectangle(blackPen, 0, 0, width - 1, height - 1)
+        g.DrawRectangle(blackPen, 0, 0, GraphicsPanel.Width - blackPen.Width, GraphicsPanel.Height - blackPen.Width)
     End Sub
 
     Private Sub GraphicFunctionButton_Click(sender As Object, e As EventArgs) Handles GraphicFunctionButton.Click
         DrawChart(_funcResult, Color.DarkRed)
+        GraphicsPanel.Invalidate()
     End Sub
 
     Private Sub GraphicDiffButton_Click(sender As Object, e As EventArgs) Handles GraphicDiffButton.Click
         DrawChart(_funcDiffResult, Color.DarkOrchid)
+        GraphicsPanel.Invalidate()
     End Sub
 
     Private Sub MainForm_Shown(sender As Object, e As EventArgs) Handles MyBase.Shown
         ClearGraphics()
-        NextValue.Value = 1.0
-        StepValue.Value = 0.001
+    End Sub
+
+    Private Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        _graphic = New Bitmap(GraphicsPanel.Width, GraphicsPanel.Height, PixelFormat.Format32bppArgb)
+        ClearGraphics()
     End Sub
 
     Private Shared Function CalculateY(x As Double, n As Double) As Double
@@ -84,7 +95,7 @@
     End Sub
 
     Private Sub ClaculateDiff()
-        Dim delta As Double = 0.0001
+        Const delta = 0.0001
         Dim startCalculateValue As Double = Convert.ToDouble(StartValue.Text)
         Dim endCalculateValue As Double = Convert.ToDouble(EndValue.Text)
         Dim n As Double = Convert.ToDouble(NextValue.Value)
@@ -99,7 +110,7 @@
     End Sub
 
     Private Sub DrawChart(result As List(Of KeyValuePair(Of Double, Double)), color As Color)
-        Dim g As Graphics = GraphicsPanel.CreateGraphics()
+        Dim g As Graphics = Graphics.FromImage(_graphic)
         Dim coloredPen = New Pen(color)
 
         coloredPen.Width = 2
@@ -130,24 +141,9 @@
     End Sub
 
     Private Sub CalculateFunctionButton_Click(sender As Object, e As EventArgs) Handles CalculateFunctionButton.Click
+        PrepareStartFunctionCall(Me)
         CalculateFunction()
-        FunctionMinValue.Text = Convert.ToString(_funcMin.Value)
-        FunctionMaxValue.Text = Convert.ToString(_funcMax.Value)
-        FunctionResultList.Items.Clear()
-        For Each pair As KeyValuePair(Of Double, Double) In _funcResult
-            Dim y As Double = pair.Value
-            Dim x As Double = pair.Key
-            FunctionResultList.Items.Add(New PointView(x, y))
-        Next
-        FunctionRootList.Items.Clear()
-        For Each pair As KeyValuePair(Of Double, Double) In _funcRoots
-            Dim y As Double = pair.Value
-            Dim x As Double = pair.Key
-            FunctionRootList.Items.Add(New PointView(x, y))
-        Next
-        GraphicFunctionButton.Enabled = True
-        GraphicDiffButton.Enabled = True
-        GraphicMaxMinButton.Enabled = True
+        PrepareEndFunctionCall(Me)
     End Sub
 
     Private Sub CalculateRoots()
@@ -259,5 +255,51 @@
 
     Private Sub GraphicIntegralButton_Click(sender As Object, e As EventArgs) Handles GraphicIntegralButton.Click
         DrawChart(_funcIntegralResult, Color.Coral)
+        GraphicsPanel.Invalidate()
     End Sub
+
+    Private Sub GraphicsPanel_Paint(sender As Object, e As PaintEventArgs) Handles GraphicsPanel.Paint
+        Dim g As Graphics = GraphicsPanel.CreateGraphics()
+        g.DrawImage(_graphic, 0, 0, GraphicsPanel.Width, GraphicsPanel.Height)
+    End Sub
+
+    Private Shared Sub PrepareStartFunctionCall(form As MainForm)
+        If form.FunctionResultList.InvokeRequired Then
+            form.Invoke(Sub()
+                            PrepareStartFunctionCall(form)
+                        End Sub)
+        Else
+            form.GraphicFunctionButton.Enabled = False
+            form.GraphicDiffButton.Enabled = False
+            form.GraphicMaxMinButton.Enabled = False
+            form.FunctionResultList.Items.Clear()
+            form.FunctionRootList.Items.Clear()
+        End If
+    End Sub
+    Private Shared Sub PrepareEndFunctionCall(form As MainForm)
+        If form.FunctionResultList.InvokeRequired Then
+            form.Invoke(Sub()
+                            PrepareEndFunctionCall(form)
+                        End Sub)
+        Else
+            form.FunctionMinValue.Text = Convert.ToString(form._funcMin.Value)
+            form.FunctionMaxValue.Text = Convert.ToString(form._funcMax.Value)
+
+            For Each pair As KeyValuePair(Of Double, Double) In form._funcResult
+                Dim y As Double = pair.Value
+                Dim x As Double = pair.Key
+                form.FunctionResultList.Items.Add(New PointView(x, y))
+            Next
+
+            For Each pair As KeyValuePair(Of Double, Double) In form._funcRoots
+                Dim y As Double = pair.Value
+                Dim x As Double = pair.Key
+                form.FunctionRootList.Items.Add(New PointView(x, y))
+            Next
+            form.GraphicFunctionButton.Enabled = True
+            form.GraphicDiffButton.Enabled = True
+            form.GraphicMaxMinButton.Enabled = True
+        End If
+    End Sub
+
 End Class
