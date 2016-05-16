@@ -165,6 +165,12 @@ Public Class MainForm
                 _funcRoots.Add(New KeyValuePair(Of Double, Double)(x, root))
             End If
         Next
+        If _funcRoots.Count >= 3 Then
+            Dim root2 As Double = _funcRoots.Item(1).Key
+            Dim root3 As Double = _funcRoots.Item(2).Key
+            Dim area = SolveSimpson(root2, root3, n, epsi)
+            AreaValue.Text = Convert.ToString(area)
+        End If
     End Sub
 
     Private Shared Function CalculateRoot(xLeft As Double, xRight As Double, n As Double, epsilon As Double) As Double
@@ -235,22 +241,54 @@ Public Class MainForm
 
     Private Sub CalculateIntegralButton_Click(sender As Object, e As EventArgs) Handles CalculateIntegralButton.Click
         CalculateIntegral()
-        IntegralResultList.Items.Clear()
-        For Each pair As KeyValuePair(Of Double, Double) In _funcIntegralResult
-            Dim y As Double = pair.Value
-            Dim x As Double = pair.Key
-            IntegralResultList.Items.Add(New PointView(x, y))
-        Next
+        'IntegralResultList.Items.Clear()
+        'For Each pair As KeyValuePair(Of Double, Double) In _funcIntegralResult
+        'Dim y As Double = pair.Value
+        'Dim x As Double = pair.Key
+        'IntegralResultList.Items.Add(New PointView(x, y))
+        'Next
         GraphicIntegralButton.Enabled = True
     End Sub
+
+    Private Function Simpson(a As Double, b As Double, n As Double, Nnn As Integer) As Double
+        Dim sum As Double = 0
+        Dim h As Double = (b - a) / Nnn
+        For i = 1 To Nnn - 1 Step 2
+            sum = sum + CalculateY(a + (i - 1) * h, n) + 4 * CalculateY(a + i * h, n) + CalculateY(a + (i + 1) * h, n)
+        Next
+        Return h / 3 * sum
+    End Function
+
+    Private Function SolveSimpson(a As Double, b As Double, n As Double, eps As Double) As Double
+        Dim Nnn As Integer = 24
+        Dim prev As Double, current As Double, delta As Double
+        prev = Simpson(a, b, n, Nnn)
+        Do
+            Nnn = Nnn * 2
+            current = Simpson(a, b, n, Nnn)
+            If Math.Abs(current) > 1 Then
+                delta = Math.Abs(current - prev) / Math.Abs(current)
+            Else
+                delta = Math.Abs(current - prev)
+            End If
+            prev = current
+        Loop Until delta <= eps
+        Return current
+    End Function
 
     Private Sub CalculateIntegral()
         Dim startValue As Double = Convert.ToDouble(StartIntegralValue.Text)
         Dim endValue As Double = Convert.ToDouble(EndIntegralValue.Text)
+        Dim epsi As Double = Convert.ToDouble(ErrorValue.Value)
+        Dim n As Double = Convert.ToDouble(NextValue.Value)
+        Dim stepCalculateValue As Double = Convert.ToDouble(StepValue.Value)
 
         _funcIntegralResult.Clear()
 
-        'TODO: Расчет интеграла
+        For x As Double = startValue To endValue Step stepCalculateValue
+            Dim y As Double = Simpson(startValue, x, n, 100)
+            _funcIntegralResult.Add(New KeyValuePair(Of Double, Double)(x, y))
+        Next
     End Sub
 
     Private Sub GraphicIntegralButton_Click(sender As Object, e As EventArgs) Handles GraphicIntegralButton.Click
@@ -285,11 +323,11 @@ Public Class MainForm
             form.FunctionMinValue.Text = Convert.ToString(form._funcMin.Value)
             form.FunctionMaxValue.Text = Convert.ToString(form._funcMax.Value)
 
-            For Each pair As KeyValuePair(Of Double, Double) In form._funcResult
-                Dim y As Double = pair.Value
-                Dim x As Double = pair.Key
-                form.FunctionResultList.Items.Add(New PointView(x, y))
-            Next
+            'For Each pair As KeyValuePair(Of Double, Double) In form._funcResult
+            'Dim y As Double = pair.Value
+            'Dim x As Double = pair.Key
+            'form.FunctionResultList.Items.Add(New PointView(x, y))
+            'Next
 
             For Each pair As KeyValuePair(Of Double, Double) In form._funcRoots
                 Dim y As Double = pair.Value
@@ -301,5 +339,4 @@ Public Class MainForm
             form.GraphicMaxMinButton.Enabled = True
         End If
     End Sub
-
 End Class

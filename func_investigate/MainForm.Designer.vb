@@ -51,6 +51,7 @@ Partial Class MainForm
         Me.IntegralResultList = New System.Windows.Forms.ListBox()
         Me.TabControl = New System.Windows.Forms.TabControl()
         Me.TabFunction = New System.Windows.Forms.TabPage()
+        Me.Label12 = New System.Windows.Forms.Label()
         Me.StepValue = New System.Windows.Forms.NumericUpDown()
         Me.FunctionRootList = New System.Windows.Forms.ListBox()
         Me.Label11 = New System.Windows.Forms.Label()
@@ -60,6 +61,7 @@ Partial Class MainForm
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.GraphicMaxMinButton = New System.Windows.Forms.Button()
         Me.ErrorValueTooltip = New System.Windows.Forms.ToolTip(Me.components)
+        Me.AreaValue = New System.Windows.Forms.TextBox()
         CType(Me.NextValue, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TabControl.SuspendLayout()
         Me.TabFunction.SuspendLayout()
@@ -322,6 +324,8 @@ Partial Class MainForm
         '
         'TabFunction
         '
+        Me.TabFunction.Controls.Add(Me.AreaValue)
+        Me.TabFunction.Controls.Add(Me.Label12)
         Me.TabFunction.Controls.Add(Me.StepValue)
         Me.TabFunction.Controls.Add(Me.FunctionRootList)
         Me.TabFunction.Controls.Add(Me.Label11)
@@ -348,6 +352,15 @@ Partial Class MainForm
         Me.TabFunction.TabIndex = 0
         Me.TabFunction.Text = "Функция"
         Me.TabFunction.UseVisualStyleBackColor = True
+        '
+        'Label12
+        '
+        Me.Label12.AutoSize = True
+        Me.Label12.Location = New System.Drawing.Point(12, 180)
+        Me.Label12.Name = "Label12"
+        Me.Label12.Size = New System.Drawing.Size(54, 11)
+        Me.Label12.TabIndex = 27
+        Me.Label12.Text = "Area = "
         '
         'StepValue
         '
@@ -445,6 +458,16 @@ Partial Class MainForm
         '
         Me.ErrorValueTooltip.ToolTipTitle = "Помощь"
         '
+        'AreaValue
+        '
+        Me.AreaValue.Location = New System.Drawing.Point(73, 177)
+        Me.AreaValue.Name = "AreaValue"
+        Me.AreaValue.ReadOnly = True
+        Me.AreaValue.Size = New System.Drawing.Size(91, 18)
+        Me.AreaValue.TabIndex = 28
+        Me.AreaValue.Text = "NaN"
+        Me.AreaValue.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 11.0!)
@@ -461,7 +484,6 @@ Partial Class MainForm
         Me.Name = "MainForm"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Лабораторная работа. Вариант №3"
-        Me.TopMost = True
         CType(Me.NextValue, System.ComponentModel.ISupportInitialize).EndInit()
         Me.TabControl.ResumeLayout(False)
         Me.TabFunction.ResumeLayout(False)
@@ -512,4 +534,6 @@ Partial Class MainForm
     Friend WithEvents FunctionRootList As ListBox
     Friend WithEvents GraphicMaxMinButton As Button
     Friend WithEvents StepValue As NumericUpDown
+    Friend WithEvents Label12 As System.Windows.Forms.Label
+    Friend WithEvents AreaValue As System.Windows.Forms.TextBox
 End Class
